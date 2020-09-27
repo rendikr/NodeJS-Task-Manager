@@ -3,13 +3,6 @@ const { MongoClient, ObjectID } = require('mongodb')
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'task-manager'
 
-const id = new ObjectID() // generate a new ObjectID
-console.log(id)
-console.log(id.getTimestamp());
-console.log(id.id);
-console.log(id.id.length);
-console.log(id.toHexString().length);
-
 MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
   if (error) {
     return console.error('Unable to connect to MongoDB database');
@@ -17,52 +10,53 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
   const db = client.db(databaseName)
 
-  // db.collection('users').insertOne({
-  //   name: 'Rendi K.',
-  //   age: 30
-  // }, (error, result) => {
-  //   if (error) {
-  //     return console.error('Unable to insert user')
-  //   }
+  db.collection('users').findOne({ name: 'Citra', age: 33 }, (error, user) => {
+    if (error) {
+      console.error('Unable to fetch')
+    }
 
-  //   console.log(result.ops)
-  // })
+    console.log(user)
+  })
 
-  // db.collection('users').insertMany([
-  //   {
-  //     name: 'Citra',
-  //     age: 33
-  //   },
-  //   {
-  //     name: 'Revirza',
-  //     age: 6
-  //   }
-  // ], (error, result) => {
-  //   if (error) {
-  //     return console.error('Unable to insert users document')
-  //   }
+  // to query by the _id, need to wrap it as ObjectID
+  db.collection('users').findOne({ _id: new ObjectID('5f6e187de82eae33505d4b9c') }, (error, user) => {
+    if (error) {
+      console.error('Unable to fetch')
+    }
 
-  //   console.log(result.ops)
-  // })
+    console.log(user)
+  })
 
-  // db.collection('tasks').insertMany([
-  //   {
-  //     description: 'Buy seat cover',
-  //     completed: false
-  //   },
-  //   {
-  //     description: 'Buy arm rest',
-  //     completed: true
-  //   },
-  //   {
-  //     description: 'Buy a new processor',
-  //     completed: false
-  //   }
-  // ], (error, result) => {
-  //   if (error) {
-  //     return console.error('Unable to insert tasks document')
-  //   }
+  // find returns a cursor, and we can convert it as an array
+  db.collection('users').find({ age: 30 }).toArray(( error, users ) => {
+    if (error) {
+      console.error('Unable to fetch');
+    }
 
-  //   console.log(result.ops)
-  // })
+    console.log(users)
+  })
+
+  db.collection('users').find({ age: 30 }).count(( error, count ) => {
+    if (error) {
+      console.error('Unable to fetch');
+    }
+
+    console.log(count)
+  })
+
+  db.collection('tasks').findOne({ _id: new ObjectID('5f6e19308a16d11b48ef8a33') }, (error, task) => {
+    if (error) {
+      console.error('Unable to fetch');
+    }
+
+    console.log(task)
+  })
+
+  db.collection('tasks').find({ completed: false }).toArray((error, tasks) => {
+    if (error) {
+      console.error('Unable to fetch');
+    }
+
+    console.log(tasks)
+  })
 })
