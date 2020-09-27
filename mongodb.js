@@ -1,10 +1,16 @@
-const mongodb = require('mongodb')
-const MongoClient = mongodb.MongoClient
+const { MongoClient, ObjectID } = require('mongodb')
 
 const connectionURL = 'mongodb://127.0.0.1:27017'
 const databaseName = 'task-manager'
 
-MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client) => {
+const id = new ObjectID() // generate a new ObjectID
+console.log(id)
+console.log(id.getTimestamp());
+console.log(id.id);
+console.log(id.id.length);
+console.log(id.toHexString().length);
+
+MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: true }, (error, client) => {
   if (error) {
     return console.error('Unable to connect to MongoDB database');
   }
@@ -39,24 +45,24 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true }, (error, client) =>
   //   console.log(result.ops)
   // })
 
-  db.collection('tasks').insertMany([
-    {
-      description: 'Buy seat cover',
-      completed: false
-    },
-    {
-      description: 'Buy arm rest',
-      completed: true
-    },
-    {
-      description: 'Buy a new processor',
-      completed: false
-    }
-  ], (error, result) => {
-    if (error) {
-      return console.error('Unable to insert tasks document')
-    }
+  // db.collection('tasks').insertMany([
+  //   {
+  //     description: 'Buy seat cover',
+  //     completed: false
+  //   },
+  //   {
+  //     description: 'Buy arm rest',
+  //     completed: true
+  //   },
+  //   {
+  //     description: 'Buy a new processor',
+  //     completed: false
+  //   }
+  // ], (error, result) => {
+  //   if (error) {
+  //     return console.error('Unable to insert tasks document')
+  //   }
 
-    console.log(result.ops)
-  })
+  //   console.log(result.ops)
+  // })
 })
