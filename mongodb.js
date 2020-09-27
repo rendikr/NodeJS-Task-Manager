@@ -10,53 +10,37 @@ MongoClient.connect(connectionURL, { useNewUrlParser: true, useUnifiedTopology: 
 
   const db = client.db(databaseName)
 
-  db.collection('users').findOne({ name: 'Citra', age: 33 }, (error, user) => {
-    if (error) {
-      console.error('Unable to fetch')
+  // find from 'users' collection filtered by the search parameter and update it
+  db.collection('users').updateOne({
+    _id: new ObjectID('5f6e172be43fb13424cd86c7')
+  }, {
+    $set: {
+      name: 'Rendi' // change the value
+    },
+    $inc: {
+      age: 1 // change the value by incrementing it's value
     }
-
-    console.log(user)
+  }).then((result) => {
+    console.log(result)
+  }).catch((error) => {
+    console.error(error)
   })
 
-  // to query by the _id, need to wrap it as ObjectID
-  db.collection('users').findOne({ _id: new ObjectID('5f6e187de82eae33505d4b9c') }, (error, user) => {
-    if (error) {
-      console.error('Unable to fetch')
+  // updatePromise.then((result) => {
+  //   console.log(result)
+  // }).catch((error) =>{
+  //   console.error(error)
+  // })
+
+  db.collection('tasks').updateMany({
+    completed: false
+  }, {
+    $set: {
+      completed: true
     }
-
-    console.log(user)
-  })
-
-  // find returns a cursor, and we can convert it as an array
-  db.collection('users').find({ age: 30 }).toArray(( error, users ) => {
-    if (error) {
-      console.error('Unable to fetch');
-    }
-
-    console.log(users)
-  })
-
-  db.collection('users').find({ age: 30 }).count(( error, count ) => {
-    if (error) {
-      console.error('Unable to fetch');
-    }
-
-    console.log(count)
-  })
-
-  db.collection('tasks').findOne({ _id: new ObjectID('5f6e19308a16d11b48ef8a33') }, (error, task) => {
-    if (error) {
-      console.error('Unable to fetch');
-    }
-
-    console.log(task)
-  })
-
-  db.collection('tasks').find({ completed: false }).toArray((error, tasks) => {
-    if (error) {
-      console.error('Unable to fetch');
-    }
-
-    console.log(tasks)
+  }).then((result) => {
+    console.log(result)
+  }).catch((error) => {
+    console.error(error)
   })
 })
