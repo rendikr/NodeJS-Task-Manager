@@ -18,6 +18,26 @@ app.post('/users', (req, res) => {
   })
 })
 
+app.get('/users', (req, res) => {
+  User.find({}).then((users) => {
+    res.status(200).send(users)
+  }).catch((e) => {
+    res.status(500).send(e)
+  })
+})
+
+app.get('/users/:id', (req, res) => {
+  User.findById(req.params.id).then((user) => {
+    if (!user) {
+      return res.status(404).send('user not found')
+    }
+
+    res.status(200).send(user)
+  }).catch((e) => {
+    res.status(500).send(e)
+  })
+})
+
 app.post('/tasks', (req, res) => {
   const task = new Task(req.body)
 
