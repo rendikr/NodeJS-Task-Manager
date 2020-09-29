@@ -16,15 +16,34 @@ const User = mongoose.model('User', {
   }
 })
 
+// // prepare a new data for the User model
+// const me = new User({
+//   name: 'Rendi K.',
+//   age: 'Thirty One'
+// })
+
+// // save the data to the database. the function returns a promise
+// me.save().then(() => {
+//   console.log(me)
+// }).catch((error) => {
+//   console.error('Error!', error)
+// })
+
+// define the model
+const Task = mongoose.model('Task', {
+  description: {
+    type: String
+  },
+  completed: {
+    type: Boolean
+  }
+})
+
 // prepare a new data for the User model
-const me = new User({
-  name: 'Rendi K.',
-  age: 'Thirty One'
+const newTask = new Task({
+  description: 'Buy a new processor',
+  completed: false
 })
 
 // save the data to the database. the function returns a promise
-me.save().then(() => {
-  console.log(me)
-}).catch((error) => {
-  console.error('Error!', error)
-})
+newTask.save().then(() => console.log(newTask)).catch((error) => console.error('Error!', error))
