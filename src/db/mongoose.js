@@ -25,6 +25,17 @@ const User = mongoose.model('User', {
       }
     }
   },
+  password: {
+    type: String,
+    required: true,
+    minlength: 7,
+    trim: true,
+    validate(value) {
+      if (value.toLowerCase().includes('password')) {
+        throw new Error('Password cannot contains "password"')
+      }
+    }
+  },
   age: {
     type: Number,
     default: 0,
@@ -36,18 +47,19 @@ const User = mongoose.model('User', {
   }
 })
 
-// prepare a new data for the User model
-const me = new User({
-  name: '         Rendi ',
-  email: 'MY@EMAIL.com         '
-})
+// // prepare a new data for the User model
+// const me = new User({
+//   name: '         Rendi ',
+//   email: 'MY@EMAIL.com         ',
+//   password: ' HelloMyPassForTheApp31!#'
+// })
 
-// save the data to the database. the function returns a promise
-me.save().then(() => {
-  console.log(me)
-}).catch((error) => {
-  console.error('Error!', error)
-})
+// // save the data to the database. the function returns a promise
+// me.save().then(() => {
+//   console.log(me)
+// }).catch((error) => {
+//   console.error('Error!', error)
+// })
 
 // define the model
 const Task = mongoose.model('Task', {
