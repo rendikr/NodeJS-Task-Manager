@@ -23,6 +23,7 @@
   "homepage": "https://github.com/rendikr/NodeJS-Task-Manager#readme",
   "dependencies": {
     "mongodb": "^3.6.2",
-    "mongoose": "^5.3.16"
+    "mongoose": "^5.3.16",
+    "validator": "^10.9.0"
   }
 }
