@@ -67,11 +67,18 @@ router.patch('/users/:id', async (req, res) => {
   }
 
   try {
-    const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+    // changing below method into more traditional way because it skips the middleware
+    // const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true })
+
+    const user = await User.findById(req.params.id)
 
     if (!user) {
       return res.status(404).send({ error: 'user not found' })
     }
+
+    updates.forEach(update => user[update] = req.body[update])
+
+    await user.save()
 
     res.status(200).send(user)
   } catch (e) {

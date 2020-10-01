@@ -1,7 +1,8 @@
 const mongoose = require('mongoose')
 const validator = require('validator')
+const bcrypt = require('bcryptjs')
 
-const User = mongoose.model('User', {
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -39,5 +40,20 @@ const User = mongoose.model('User', {
     }
   }
 })
+
+// add a middleware
+// pre(): do some function before an event. for after an event, use post()
+userSchema.pre('save', async function (next) {
+  const user = this
+
+  // check if 'password' field is change. if true, hash the value. if false, do not change the value
+  if (user.isModified('password')) {
+    user.password = await bcrypt.hash(user.password, 8)
+  }
+
+  next()
+})
+
+const User = mongoose.model('User', userSchema)
 
 module.exports = User
