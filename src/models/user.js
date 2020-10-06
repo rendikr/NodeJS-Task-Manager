@@ -62,6 +62,17 @@ userSchema.methods.generateAuthToken = async function () {
   return token
 }
 
+// override data given on json request. this works on all of the model's instances
+userSchema.methods.toJSON = function () {
+  const user = this
+  const userObject = user.toObject()
+
+  delete userObject.password
+  delete userObject.tokens
+
+  return userObject
+}
+
 // add a custom method for the user schema
 // statics are accessible on the model
 // <schema>.statics.<methodName>
