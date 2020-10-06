@@ -62,6 +62,13 @@ userSchema.methods.generateAuthToken = async function () {
   return token
 }
 
+// reference another model without storing it to the database
+userSchema.virtual('tasks', {
+  ref: 'Task',
+  localField: '_id',
+  foreignField: 'owner'
+})
+
 // override data given on json request. this works on all of the model's instances
 userSchema.methods.toJSON = function () {
   const user = this
