@@ -15,6 +15,7 @@ const auth = async (req, res, next) => {
       throw new Error() // if no error message provided, it will go to the catch
     }
 
+    req.token = token
     req.user = user
 
     next()
