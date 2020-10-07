@@ -48,6 +48,8 @@ const userSchema = new mongoose.Schema({
       required: true,
     }
   }]
+}, {
+  timestamps: true
 })
 
 // add a custom method for the user schema
