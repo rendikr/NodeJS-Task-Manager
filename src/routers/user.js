@@ -1,4 +1,5 @@
 const express = require('express')
+const multer = require('multer')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
 const router = new express.Router()
@@ -117,6 +118,15 @@ router.delete('/users/me', auth, async (req, res) => {
   } catch (e) {
     res.status(500).send(e)
   }
+})
+
+const upload = multer({
+  dest: 'avatars' // set the destination for the upload location
+})
+
+// check for field on request named 'avatar'. if there are any, upload its content using the multer upload
+router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
+  res.status(200).send()
 })
 
 module.exports = router
