@@ -29,7 +29,11 @@ router.get('/tasks', auth, async (req, res) => {
     // customize the populate with an object to further filter the relationship data
     await req.user.populate({
       path: 'tasks',
-      match
+      match,
+      options: {
+        limit: parseInt(req.query.limit), // if limit is not provided, it will be ignored by mongoose
+        skip: parseInt(req.query.skip) // if skip is not provided, it will be ignored by mongoose
+      }
     }).execPopulate()
     res.status(200).send(req.user.tasks)
   } catch (e) {
