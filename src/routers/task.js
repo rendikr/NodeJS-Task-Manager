@@ -4,14 +4,6 @@ const auth = require('../middleware/auth')
 const router = new express.Router()
 
 router.post('/tasks', auth, async (req, res) => {
-  // const task = new Task(req.body)
-
-  // task.save().then(() => {
-  //   res.status(201).send(task)
-  // }).catch((e) => {
-  //   res.status(400).send(e)
-  // })
-
   try {
     const task = new Task({
       ...req.body,
@@ -26,21 +18,19 @@ router.post('/tasks', auth, async (req, res) => {
 })
 
 router.get('/tasks', auth, async (req, res) => {
-  // Task.find({}).then((tasks) => {
-  //   res.status(200).send(tasks)
-  // }).catch((e) => {
-  //   res.status(500).send(e)
-  // })
+  const match = {}
+
+  if (req.query.completed) {
+    match.completed = req.query.completed === 'true'
+  }
 
   try {
-    // first method is to query the task by the user id
-    // const tasks = await Task.find({
-    //   owner: req.user._id
-    // })
-    // res.status(200).send(tasks)
-
-    // second method is to get the tasks relationship by the authenticated user
-    await req.user.populate('tasks').execPopulate()
+    // get the tasks relationship by the authenticated user
+    // customize the populate with an object to further filter the relationship data
+    await req.user.populate({
+      path: 'tasks',
+      match
+    }).execPopulate()
     res.status(200).send(req.user.tasks)
   } catch (e) {
     res.status(500).send(e)
@@ -48,16 +38,6 @@ router.get('/tasks', auth, async (req, res) => {
 })
 
 router.get('/tasks/:id', auth, async (req, res) => {
-  // Task.findById(req.params.id).then((task) => {
-  //   if (!task) {
-  //     return res.status(404).send('task not found')
-  //   }
-
-  //   res.status(200).send(task)
-  // }).catch((e) => {
-  //   res.status(500).send(e)
-  // })
-
   try {
     const task = await Task.findOne({
       _id: req.params.id, owner: req.user._id
