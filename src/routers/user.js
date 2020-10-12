@@ -141,6 +141,8 @@ const upload = multer({
 // check for field on request named 'avatar'. if there are any, upload its content using the multer upload
 router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
   res.status(200).send()
+}, (error, req, res, next) => {
+  res.status(400).send({ error: error.message })
 })
 
 module.exports = router
