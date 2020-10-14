@@ -121,7 +121,9 @@ router.delete('/users/me', auth, async (req, res) => {
 })
 
 const upload = multer({
-  dest: 'avatars', // set the destination for the upload location
+  // if dest property doesn't provided, it will pass the data through the function
+  // dest: 'avatars', // set the destination for the upload location on the root of the project
+
   limits: {
     fileSize: 1000000 // set the max file size in bytes. 1000000 bytes = 1 mb
   },
@@ -130,7 +132,7 @@ const upload = multer({
       return cb(new Error('Please upload an image')) // upload failed & returns an error
     }
     // if (!file.originalname.endsWith('.jpg')) {
-    //   return cb(new Error('Please upload a JPG Image')) // upload failed & returns an error
+    //   return cb(new Error('Please upload a JPG Image')) // upload failed (invalid file format) & returns an error
     // }
 
     cb(undefined, true) // upload success & accept the upload
@@ -139,10 +141,25 @@ const upload = multer({
 })
 
 // check for field on request named 'avatar'. if there are any, upload its content using the multer upload
-router.post('/users/me/avatar', upload.single('avatar'), async (req, res) => {
+router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) => {
+  // if multer doesn't provide the 'dest' property, the 'req' will have access to the file (req.file)
+  req.user.avatar = req.file.buffer
+  await req.user.save()
+
   res.status(200).send()
 }, (error, req, res, next) => {
   res.status(400).send({ error: error.message })
+})
+
+router.delete('/users/me/avatar', auth, async (req, res) => {
+  try {
+    req.user.avatar = undefined
+    await req.user.save()
+
+    res.status(200).send(req.user)
+  } catch (e) {
+    res.status(500).send(e)
+  }
 })
 
 module.exports = router
