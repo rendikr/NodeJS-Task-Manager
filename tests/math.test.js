@@ -24,12 +24,12 @@ test('Should convert 0 Celcius to 32 Fahrenheit', () => {
   expect(fahrenheitTemp).toBe(32)
 })
 
-test('Async test demo', (done) => {
-  setTimeout(() => {
-    expect(1).toBe(1)
-    done()
-  }, 2000)
-})
+// test('Async test demo', (done) => {
+//   setTimeout(() => {
+//     expect(1).toBe(1)
+//     done()
+//   }, 2000)
+// })
 
 test('Should add two numbers', (done) => {
   add(2, 3).then((sum) => {

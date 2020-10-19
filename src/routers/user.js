@@ -5,6 +5,7 @@ const User = require('../models/user')
 const auth = require('../middleware/auth')
 const { sendWelcomeEmail, sendCancellationEmail } = require('../emails/account')
 const router = new express.Router()
+const APP_ENV = process.env.APP_ENV || 'production'
 
 router.post('/users', async (req, res) => {
   // user.save().then(() => {
@@ -17,7 +18,9 @@ router.post('/users', async (req, res) => {
     const user = new User(req.body)
     await user.save()
 
-    sendWelcomeEmail(user.email, user.name)
+    if (APP_ENV === 'production') {
+      sendWelcomeEmail(user.email, user.name)
+    }
 
     const token = await user.generateAuthToken()
 
@@ -117,7 +120,10 @@ router.patch('/users/me', auth, async (req, res) => {
 router.delete('/users/me', auth, async (req, res) => {
   try {
     await req.user.remove()
-    sendCancellationEmail(req.user.email, req.user.name)
+
+    if (APP_ENV === 'production') {
+      sendCancellationEmail(req.user.email, req.user.name)
+    }
 
     res.status(200).send(req.user)
   } catch (e) {
