@@ -103,7 +103,7 @@ router.patch('/users/me', auth, async (req, res) => {
   const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
   if (!isValidOperation) {
-    res.status(400).send({ error: 'Invalid updates'})
+    return res.status(400).send({ error: 'Invalid updates'})
   }
 
   try {
@@ -160,7 +160,7 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
   // resize() will resize the image to specific size
   // png() convert the image to png file format
   const buffer = await sharp(req.file.buffer).resize({ width: 250, height: 250 }).png().toBuffer()
-  req.user.buffer = buffer
+  req.user.avatar = buffer
   await req.user.save()
 
   res.send()
