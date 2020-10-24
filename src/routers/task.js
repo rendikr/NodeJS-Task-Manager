@@ -45,7 +45,7 @@ router.get('/tasks', auth, async (req, res) => {
         sort
       }
     }).execPopulate()
-    res.status(200).send(req.user.tasks)
+    res.send(req.user.tasks)
   } catch (e) {
     res.status(500).send(e)
   }
@@ -61,7 +61,7 @@ router.get('/tasks/:id', auth, async (req, res) => {
       return res.status(404).send({ error: 'task not found' })
     }
 
-    res.status(200).send(task)
+    res.send(task)
   } catch (e) {
     res.status(500).send(e)
   }
@@ -91,7 +91,7 @@ router.patch('/tasks/:id', auth, async (req, res) => {
     updates.forEach(update => task[update] = req.body[update])
     await task.save()
 
-    res.status(200).send(task)
+    res.send(task)
   } catch (e) {
     res.status(400).send(e)
   }
@@ -107,7 +107,7 @@ router.delete('/tasks/:id', auth, async (req, res) => {
       return res.status(404).send({ error: 'task not found' })
     }
 
-    res.status(200).send(task)
+    res.send(task)
   } catch (e) {
     res.status(500).send(e)
   }

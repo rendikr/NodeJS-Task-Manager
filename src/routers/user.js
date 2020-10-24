@@ -39,7 +39,7 @@ router.post('/users/login', async (req, res) => {
 
     const token = await user.generateAuthToken()
 
-    res.status(200).send({
+    res.send({
       user,
       token
     })
@@ -56,7 +56,7 @@ router.post('/users/logout', auth, async (req, res) => {
 
     await req.user.save()
 
-    res.status(200).send()
+    res.send()
   } catch (e) {
     res.status(500).send(e)
   }
@@ -68,7 +68,7 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 
     await req.user.save()
 
-    res.status(200).send()
+    res.send()
   } catch (e) {
     res.status(500).send(e)
   }
@@ -76,14 +76,14 @@ router.post('/users/logoutAll', auth, async (req, res) => {
 
 router.get('/users', auth, async (req, res) => {
   // User.find({}).then((users) => {
-  //   res.status(200).send(users)
+  //   res.send(users)
   // }).catch((e) => {
   //   res.status(500).send(e)
   // })
 
   try {
     const users = await User.find({})
-    res.status(200).send(users)
+    res.send(users)
   } catch (e) {
     res.status(500).send(e)
   }
@@ -91,7 +91,7 @@ router.get('/users', auth, async (req, res) => {
 
 router.get('/users/me', auth, async (req, res) => {
   try {
-    res.status(200).send(req.user)
+    res.send(req.user)
   } catch (e) {
     res.status(500).send(e)
   }
@@ -111,7 +111,7 @@ router.patch('/users/me', auth, async (req, res) => {
 
     await req.user.save()
 
-    res.status(200).send(req.user)
+    res.send(req.user)
   } catch (e) {
     res.status(400).send(e)
   }
@@ -125,7 +125,7 @@ router.delete('/users/me', auth, async (req, res) => {
       sendCancellationEmail(req.user.email, req.user.name)
     }
 
-    res.status(200).send(req.user)
+    res.send(req.user)
   } catch (e) {
     res.status(500).send(e)
   }
@@ -163,7 +163,7 @@ router.post('/users/me/avatar', auth, upload.single('avatar'), async (req, res) 
   req.user.buffer = buffer
   await req.user.save()
 
-  res.status(200).send()
+  res.send()
 }, (error, req, res, next) => {
   res.status(400).send({ error: error.message })
 })
@@ -173,7 +173,7 @@ router.delete('/users/me/avatar', auth, async (req, res) => {
     req.user.avatar = undefined
     await req.user.save()
 
-    res.status(200).send(req.user)
+    res.send(req.user)
   } catch (e) {
     res.status(500).send(e)
   }
@@ -188,7 +188,7 @@ router.get('/users/:id/avatar', async (req, res) => {
     }
 
     res.set('Content-Type', 'image/png') // res.set() => set the header of the response
-    res.status(200).send(user.avatar)
+    res.send(user.avatar)
   } catch (e) {
     res.status(404).send(e)
   }
